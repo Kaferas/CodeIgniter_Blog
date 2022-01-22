@@ -1,0 +1,189 @@
+<?= $this->extend('template/layout') ?>
+
+
+<?= $this->section('content') ?>
+
+<div class="container mt-5">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb bg-primary p-1 ">
+            <li class="breadcrumb-item"><a href="/" class="link-secondary text-light">Home</a></li>
+            <li class="breadcrumb-item active text-light" aria-current="page">
+                <a class="link-secondary text-light" href="<?= '/post/' . $post->slug ?>">
+                    <?= $post->title ?>
+                </a>
+            </li>
+        </ol>
+    </nav>
+    <div class="container-fluid px-5 mx-auto my-5">
+        <?php if (session()->get('msg')) : ?>
+            <div class="alert alert-success">
+                <?= session()->get('msg')  ?>
+            </div>
+        <?php endif; ?>
+        <span class="h2 mb-5"><?= $post->title ?></span>
+        <div class="card d-flex flex-column my-3 p-3">
+            <img src="<?= '/' . $post->img_dir ?>" class="card img-fluid p-3" alt="..." width="300px" height="300px">
+            <small class="mt-3">
+                <span class="h6">Writen by <?= $writer ?> on <i><?= date("d-m-Y", strtotime($post->created_at)) ?></i> ,</span>
+            </small>
+            <i class="text-muted text-primary mt-2"> Tags:
+                <?php foreach ($tags as $item) : ?>
+                    <span class="badge bg-info"><?= $item->name ?></span>
+                <?php endforeach ?>
+            </i>
+            <small class="text-muted mt-3">
+                <span class="h6">Like: <?= $post->like ?> like | <?= $post->unlike ?> unlike ,</span>
+                <span id="like">
+
+                </span>
+            </small>
+        </div>
+
+        <p class="my-5 bg-light rounded">
+            <?= $post->description ?>
+        </p>
+
+        <button type="submit" class="btn btn-primary" id="btnLike">
+            👍 Like
+        </button>
+        <button type="submit" class="btn btn-light border-dark" id="btnUnlike">
+            ❌Dislike
+        </button>
+        <div class="d-flex justify-content-center">
+            <form action="<?= base_url('/like/' . $post->slug) ?>" method="post">
+                <input type="hidden" name="id" value="<?= $post->id ?>">
+                <input type="hidden" name="like" value="<?= $post->like ?>">
+            </form>
+            <form action="<?= base_url('/unlike/' . $post->slug) ?>" method="post">
+                <input type="hidden" name="id" value="<?= $post->id ?>">
+                <input type="hidden" name="unlike" value="<?= $post->unlike ?>">
+            </form>
+        </div>
+
+        <hr class="bg-secondary">
+        <p>Comments:</p>
+        <div id="results">
+
+        </div>
+        <div class="w-100"></div>
+
+        <button type="submit" id="commentBtn" class="btn btn-primary">Add a Comment</button>
+
+        <form action="" method="post" class="invisible w-50" id="commentForm">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" name="email" id="email" class="form-control" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Pseudo</label>
+                <input type="name" name="name" id="name" class="form-control">
+                <input type="hidden" name="post_id" value="<?= esc($post->id) ?>">
+            </div>
+            <div class="mb-3 ">
+                <label class="form-label" for="description">Your comment</label>
+                <textarea class="form-control" id="description" name="description" aria-label="With textarea"></textarea>
+            </div>
+            <button type="submit" id="submitCommentForm" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+</div>
+
+
+<?= $this->endSection() ?>
+
+<?= $this->section('js') ?>
+<script>
+    $(function() {
+
+        var btn = $('#btnLike')
+        var like = $('#like')
+        var unlike = $('#btnUnlike')
+        var num = 0
+
+        btn.on('click', function() {
+            num += 1
+            console.log(num)
+            like.html(num)
+        })
+
+        unlike.on('click', function() {
+            if (num % 3 == 0) {
+                num -= 1
+                like.html(num)
+            }
+        })
+
+        var addBtn = $("#commentBtn");
+        addBtn.on('click', () => {
+            $("#commentForm").removeClass("invisible")
+            $("#commentForm").toggleClass("visible")
+        });
+
+        reloadTable()
+
+        function reloadTable() {
+            $.ajax({
+                url: "<?= base_url('/allComment/' . $post->id) ?>",
+                type: "GET",
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                beforeSend: function(res) {
+                    $('#results').html('Fetching ...');
+                },
+                success: function(data) {
+                    $('#results').html(data);
+                }
+            })
+        }
+
+        $('#submitCommentForm').on('click', function(e) {
+
+            e.preventDefault();
+            $.ajax({
+                url: "<?= base_url('/countComment/' . $post->id) ?>",
+                type: "GET",
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(data) {
+                    count = data.count
+                    if (data.count < 3) {
+
+                        $.ajax({
+                            url: "<?php echo site_url('/comment') ?>",
+                            type: "POST",
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            data: $('#commentForm').serialize(),
+                            processData: false,
+                            contentType: false,
+                            dataType: "JSON",
+                            success: function(data) {
+                                if (data.success == true) {
+                                    toastr.success(data.msg, "success")
+                                    setInterval(reloadTable(), 1000)
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                alert('Error at add data');
+                            }
+                        });
+                    } else {
+                        toastr.warning('the number of comments of this post has been reached', 'Sorry')
+                    }
+                }
+            })
+
+
+
+            $("#commentForm").removeClass("visible")
+            $("#commentForm").toggleClass("invisible")
+        });
+    })
+</script>
+
+<?= $this->endSection() ?>
