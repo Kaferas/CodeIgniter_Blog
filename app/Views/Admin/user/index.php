@@ -5,8 +5,8 @@
 
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1>Lists of all users</h1>
-    <a href="<?= base_url('/users/new') ?>" class="btn btn-primary">Add user</a>
+    <a href="<?= base_url('/users/new') ?>" class="btn btn-primary"><i class="h3">👨‍⚕️</i>&nbsp;New User</a>
+    <h1>All Users</h1>
 </div>
 
 <?php if (session()->get('success')) : ?>
@@ -16,11 +16,11 @@
 <?php endif; ?>
 
 <div class="table-responsive">
-    <table class="table table-striped table-sm">
+    <table class="table table-dark p-2 table-sm">
         <thead>
-            <tr>
-                <th scope="col">#ID</th>
-                <th scope="col">Name</th>
+            <tr class="text-center">
+                <th scope="col">Id</th>
+                <th scope="col">Fullname</th>
                 <th scope="col">Email</th>
                 <th scope="col">Status</th>
                 <th scope="col">Role</th>
@@ -29,21 +29,23 @@
         </thead>
         <tbody>
             <?php foreach ($users as $user) :  ?>
-                <tr>
+                <tr class="text-center">
                     <td> <?= $user->id ?> </td>
                     <td><?= $user->fullName ?></td>
                     <td><?= $user->email ?></td>
                     <td>
-                        <?= $user->active == 1 ? '<span class="badge bg-info">active</span>' : '<span class="badge bg-danger">inactive</span>' ?>
+                        <?= $user->active == 1 ? '<span class="badge bg-success">active</span>' : '<span class="badge bg-danger">inactive</span>' ?>
                     </td>
                     <td><?= $user->role ?></td>
                     <td>
-                        <a href="<?= base_url('/users/' . $user->id . '/edit') ?>" class="btn btn-primary">Edit</a>
-                        <form action="<?= base_url('/users/delete/' . $user->id) ?>" method="post" onsubmit="return confirm('are you sure')">
-                            <button type="submit" class="btn btn-danger">
-                                Delete
-                            </button>
-                        </form>
+                        <div class="d-flex justify-content-between">
+                            <a href="<?= base_url('/users/' . $user->id . '/edit') ?>" class="btn btn-info">Editer</a>
+                            <form action="<?= base_url('/users/delete/' . $user->id) ?>" method="post" onsubmit="return confirm('Is it real What You Need ?')">
+                                <button type="submit" class="btn btn-danger container">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             <?php endforeach  ?>

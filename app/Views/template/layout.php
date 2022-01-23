@@ -13,7 +13,7 @@
 <body class="d-flex flex-column h-100">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container d-flex justify-content-center">
-            <a class="navbar-brand" href="#">Kaferas Blog</a>
+            <a class="navbar-brand" href="<?= base_url("/") ?>">Kaferas Blog</a>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
@@ -25,6 +25,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= base_url('/dashboard') ?>">Tableau de Bord</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('/login') ?>">Login</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -35,7 +38,7 @@
 
     <footer class="footer bg-secondary py-4 mt-auto mb-0">
         <div class="container text-light">
-            <p class="d-flex justify-content-center">Made by <a href="github.com/Kaferas" class="link-light">&nbsp;Kaferas</a></p>
+            <p class="d-flex justify-content-center align-items-center">Made with ❤ by <a href="https://github.com/Kaferas" class="link-light">&nbsp;Kaferas</a></p>
         </div>
     </footer>
 

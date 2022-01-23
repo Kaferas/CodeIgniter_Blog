@@ -17,8 +17,8 @@
 
  <body>
 
-     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">Kaferas Blog</a>
+     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow d-flex">
+         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 d-flex justify-content-center" href="/">Kaferas Blog</a>
          <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
              <span class="navbar-toggler-icon"></span>
          </button>
@@ -26,7 +26,7 @@
              <div class="nav-item text-nowrap">
                  <form action="/logout" method="post">
                      <button type="submit" class="btn btn-dark">
-                         <a class="nav-link px-3">Sign out</a>
+                         <a class="nav-link px-3"><i class="h3">🔓</i>&nbsp;Sign out</a>
                      </button>
                  </form>
              </div>
@@ -36,39 +36,39 @@
      <div class="container-fluid">
          <div class="row">
              <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar ">
-                 <div class="position-sticky pt-3">
-                     <ul class="nav d-flex flex-column align-center justify-content-between">
+                 <div class="position-sticky pt-3 d-flex justify-content-evenly h-100 align-items-around bg-primary">
+                     <ul class="nav d-flex flex-column align-center justify-content-center">
                          <li class="nav-item h-25 ">
-                             <a class="nav-link active align-center" aria-current="page" href="<?= base_url('/dashboard') ?>">
+                             <a class="nav-link active align-center text-light" aria-current="page" href="<?= base_url('/dashboard') ?>">
                                  <span data-feather="home"></span>
-                                 Dashboard
+                                 <i class="h3">🎰</i> Tableau
                              </a>
                          </li>
                          <?php if (session()->get('role') == 'admin') : ?>
-                             <li class="nav-item">
-                                 <a class="nav-link" href="<?= base_url('/users') ?>">
+                             <li class="nav-item mb-4">
+                                 <a class="nav-link text-light" href="<?= base_url('/users') ?>">
                                      <span data-feather="file"></span>
-                                     Users
+                                     <i class="h3">👨‍⚕️</i> Utilisateur
                                  </a>
                              </li>
-                             <li class="nav-item">
-                                 <a class="nav-link" href="<?= base_url('/roles') ?>">
+                             <li class="nav-item mb-4">
+                                 <a class="nav-link text-light" href="<?= base_url('/roles') ?>">
                                      <span data-feather="shopping-cart"></span>
-                                     Roles
+                                     <i class="h3">♿</i> Droits
                                  </a>
                              </li>
-                             <li class="nav-item">
-                                 <a class="nav-link" href="<?= base_url('/tags') ?>">
+                             <li class="nav-item mb-4">
+                                 <a class="nav-link text-light" href="<?= base_url('/tags') ?>">
                                      <span data-feather="users"></span>
-                                     Tags
+                                     <i class="h3">🔗</i> Tags
                                  </a>
                              </li>
                          <?php endif ?>
 
-                         <li class="nav-item">
-                             <a class="nav-link" href="<?= base_url('/posts') ?>">
+                         <li class="nav-item mb-4">
+                             <a class="nav-link text-light" href="<?= base_url('/posts') ?>">
                                  <span data-feather="users"></span>
-                                 Posts
+                                 <i class="h3">📑</i> Articles
                              </a>
                          </li>
 
